@@ -1,19 +1,15 @@
 import org.w3c.dom.Document;
-import org.xml.sax.*;
-import org.xml.sax.helpers.DefaultHandler;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
-import javax.xml.parsers.*;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
+import javax.print.attribute.Attribute;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXSource;
-import java.beans.XMLDecoder;
-import java.io.*;
+import java.io.IOException;
 
 public class HttpServer {
 
@@ -23,11 +19,35 @@ public class HttpServer {
     public HttpServer() {
     }
 
+    public static void toString(NodeList Zut) {
+        for (int i = 0; i < Zut.getLength(); i++) {
+            System.out.println(Zut.item(i).getNodeName()+": "+Zut.item(i).getTextContent());
+        }
+    }
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException {
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document document = documentBuilder.parse("fxml/webconfig.xml");
-        System.out.println(document.getDocumentElement().getTextContent());
+
+        NodeList ligne;//=document.getDocumentElement().getTextContent();
+        ligne = document.getDocumentElement().getElementsByTagName("port");
+        //String [] tab=ligne.split("\t");
+        System.out.println(ligne.item(0).getTextContent());
+
+        Node port = document.getDocumentElement();
+
+            NodeList root = document.getElementsByTagName("root");
+            NodeList index = document.getElementsByTagName("index");
+            NodeList accept = document.getElementsByTagName("accept");
+            NodeList reject = document.getElementsByTagName("reject");
+
+        System.out.println("port :" + port.getTextContent());
+        toString(root);
+        toString(index);
+        toString(accept);
+        toString(reject);
+
+
 
        /* if (args.length == 1) {
             port = Integer.parseInt(args[0]);
