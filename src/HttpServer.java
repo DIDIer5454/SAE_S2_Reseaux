@@ -1,27 +1,35 @@
-import org.xml.sax.XMLReader;
+import org.w3c.dom.Document;
+import org.xml.sax.*;
+import org.xml.sax.helpers.DefaultHandler;
 
-import javax.imageio.stream.FileImageInputStream;
+import javax.xml.parsers.*;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.sax.SAXSource;
 import java.beans.XMLDecoder;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.util.Date;
-import java.util.Scanner;
 
-public class HttpServer  {
+public class HttpServer {
 
 
-/*
-    public static int   port = 80;
+    public static int port = 80;
 
     public HttpServer() {
     }
 
 
-    public static void main(String[] args) throws IOException {
-        if (args.length == 1) {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, TransformerException {
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = documentBuilder.parse("fxml/webconfig.xml");
+        System.out.println(document.getDocumentElement().getTextContent());
+
+       /* if (args.length == 1) {
             port = Integer.parseInt(args[0]);
         }
 
@@ -74,8 +82,8 @@ public class HttpServer  {
 
             }
             serverSocket.close();
-        }
-    }*/
+        }*/
+    }
 }
 
 
