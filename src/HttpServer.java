@@ -1,4 +1,7 @@
+import org.xml.sax.XMLReader;
+
 import javax.imageio.stream.FileImageInputStream;
+import java.beans.XMLDecoder;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,7 +10,10 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Scanner;
 
-public class HttpServer {
+public class HttpServer  {
+
+
+/*
     public static int   port = 80;
 
     public HttpServer() {
@@ -69,7 +75,7 @@ public class HttpServer {
             }
             serverSocket.close();
         }
-    }
+    }*/
 }
 
 
