@@ -49,7 +49,7 @@ public class HttpServer {
 
 
         port = Integer.parseInt(Sport);
-        
+
 
 
         while (true) {
@@ -66,9 +66,6 @@ public class HttpServer {
                         String reponse = "HTTP/1.1 200 OK\\r\\n";
                         System.out.println("[serveur] En attente d'un message clavier");
 
-                        // ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-
-                        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
                         byte[] rep = reponse.getBytes();
                         InputStream fileInputStream = new FileInputStream(fichier);
                         byte[] data = fileInputStream.readAllBytes();
@@ -81,6 +78,7 @@ public class HttpServer {
                         System.out.println("non trouve");
                     }
                     stop = true;
+
                 } else {
                     System.out.println("[server]En attente du client");
                     InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
