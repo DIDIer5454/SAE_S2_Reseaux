@@ -68,11 +68,6 @@ public class HttpServer {
                         System.out.println("[serveur] En attente d'un message clavier");
 
                         // ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                        if (fichier == null) {
-                            fichier=Sroot;
-                        }
-                        System.out.print(fichier);
-                        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
                         byte[] rep = reponse.getBytes();
                         InputStream fileInputStream = new FileInputStream(fichier);
                         byte[] data = fileInputStream.readAllBytes();
@@ -92,7 +87,7 @@ public class HttpServer {
                     String recu = bufferedReader.readLine();
                     System.out.println(recu);
                     if (recu != null) {
-                        fichier = "site web" + recu.substring(4, recu.indexOf("HTTP/1.1"));
+                        fichier = Sroot + recu.substring(4, recu.indexOf("HTTP/1.1"));
                         System.out.println(fichier);
                     }
                     Sontour = true;
