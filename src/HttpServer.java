@@ -24,7 +24,7 @@ public class HttpServer {
     public static String toString(NodeList Zut) {
         String S = "";
         for (int i = 0; i < Zut.getLength(); i++) {
-            S +=  Zut.item(i).getTextContent();
+            S += Zut.item(i).getTextContent();
         }
         return S;
     }
@@ -44,12 +44,13 @@ public class HttpServer {
         String Sport = toString(Nport);
         String Sroot = toString(root);
         String Sindex = toString(index);
+
         String Saccept = toString(accept);
+
         String Sreject = toString(reject);
 
 
         port = Integer.parseInt(Sport);
-        
 
 
         while (true) {
@@ -67,7 +68,10 @@ public class HttpServer {
                         System.out.println("[serveur] En attente d'un message clavier");
 
                         // ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-
+                        if (fichier == null) {
+                            fichier=Sroot;
+                        }
+                        System.out.print(fichier);
                         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
                         byte[] rep = reponse.getBytes();
                         InputStream fileInputStream = new FileInputStream(fichier);
