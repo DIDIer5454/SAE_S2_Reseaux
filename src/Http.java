@@ -9,19 +9,14 @@ import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
 public class Http {
-
     public static boolean indexB;
-    public static int port = 80;
     public static ArrayList<String> rejette;
     public static ArrayList<String> accepte;
-
-    public Http() {
-    }
-
     public static String toString(NodeList Zut) {
         String S = "";
         for (int i = 0; i < Zut.getLength(); i++) {
@@ -32,7 +27,6 @@ public class Http {
         }
         return S;
     }
-
     /**
      * methode convertissant un entier en tableau de 8 entier representant les 8 bit dun octet
      *
@@ -50,7 +44,6 @@ public class Http {
         }
         return reseau;
     }
-
     /**
      * methode convertissant un tableau de 8 entier representant des bit doctet
      * en entier
@@ -68,11 +61,9 @@ public class Http {
         }
         return octet;
     }
-
     /**
      * methode retournant un tableau a double entree de bit
      * representant les bit du masque
-     *
      * @param mask
      * @return
      */
@@ -95,7 +86,6 @@ public class Http {
 
     /**
      * methode fesant une addition bit a bit
-     *
      * @param Ip
      * @param mask
      * @return
@@ -132,19 +122,6 @@ public class Http {
      */
     public static boolean estDans(String[] tab, String Ip) {
         boolean m = true;
-
-        /*
--currentAddressMask=tableau de String de la forme {"Adrresse Reseau" ;"Mask"}
--addressReseauString est l'AdrressReseau sous forme de chaine de caractère
--mask cest le masque reseau sous forme d'entier
--currentIP est laddresse IP client sous forme de tableau dentier de taille 4 (ce programme ne traite que les addresse en IPv4
-            ,sauf si lhote du client  est aussi lordinateur hebergeant le serveur).
-
- **la logique de cette methode est de rechercher une addresse reseau a partir de laddresse Ip du client
- et du masque du reseau cette addresse calculé sera comparé a laddresse reseau fourni par le tableau en
- parametre si cest identique alors la methode renvoi true.
-
- */
         for (int j = 0; j < tab.length; j++) {
 
             String[] currentAddressMask = tab[j].split("/");
@@ -220,50 +197,40 @@ public class Http {
         String Saccept = toString(accept);
         String Sreject = toString(reject);
 
-
-        port = Integer.parseInt(Sport);
+        int port = Integer.parseInt(Sport);
         indexB = Boolean.parseBoolean(Sindex);
         String[] rejecttab = Sreject.split("\n");
         String[] accepttab = Saccept.split("\n");
 
-
-
-            ServerSocket serverSocket = new ServerSocket(port);
-
-String fichier=null;
-            while(true){
+        ServerSocket serverSocket = new ServerSocket(port);
+        String fichier = null;
+        while (true) {
             Socket socket = serverSocket.accept();
-             InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String recu = bufferedReader.readLine();
-                    System.out.println("recu:"+recu);
-                    if (recu != null) {
-                        fichier = Sroot + recu.substring(4, recu.indexOf("HTTP/1.1"));
-                       System.out.println("fichier:"+fichier);
-            if(recu !=null){
-                    try {
-                        String reponse = "HTTP/1.1 200 OK\r\n";
-                        String contenttype="Content-Type: text/html";
-			 System.out.println(fichier);
-
-                        byte[] rep = reponse.getBytes();
-                        byte[]content=contenttype.getBytes();
-                        fichier="index.html";
-                        InputStream fileInputStream = new FileInputStream(fichier);
-                        byte[] data = fileInputStream.readAllBytes();
-                        socket.getOutputStream().write(rep);
-                        //socket.getOutputStream().write(content);
-                        socket.getOutputStream().write(data);
-                        socket.getOutputStream().flush();
-			 socket.close();
-                    } catch (FileNotFoundException f) {
-                        System.out.println("non trouve");
-                        socket.close();
-                    }
-                    
+            InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String recu = bufferedReader.readLine();
+            System.out.println("recu:" + recu);
+            if (recu != null) {
+                fichier = Sroot + recu.substring(4, recu.indexOf("HTTP/1.1"));
+                try {
+                    String reponse = "HTTP/1.1 200 OK\r\n";
+                    String contenttype = "Content-Type: text/html\r\n\r\n";
+                    byte[] rep = reponse.getBytes(StandardCharsets.UTF_8);
+                    byte[] content = contenttype.getBytes(StandardCharsets.UTF_8);
+                    InputStream fileInputStream = new FileInputStream(fichier);
+                    byte[] data = fileInputStream.readAllBytes();
+                    socket.getOutputStream().write(rep);
+                    socket.getOutputStream().write(content);
+                    socket.getOutputStream().write(data);
+                    socket.getOutputStream().flush();
+                    socket.close();
+                } catch (FileNotFoundException f) {
+                    System.out.println("non trouve");
+                    System.out.println(fichier);
+                    socket.close();
+                }
             }
-            }
-            }
-            }
-            }
+        }
+    }
+}
             

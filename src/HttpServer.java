@@ -9,6 +9,7 @@ import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
@@ -203,7 +204,7 @@ public class HttpServer {
 
 
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = documentBuilder.parse("fxml/webconfig.xml");
+        Document document = documentBuilder.parse("../fxml/webconfig.xml");
 
 
         NodeList Nport = document.getElementsByTagName("port");
@@ -241,28 +242,30 @@ public class HttpServer {
 
                 address = address.substring(8);
             }
-            System.out.println(address);
-            System.out.println(serverSocket.getLocalSocketAddress());
+            /*System.out.println(address);
+            System.out.println(serverSocket.getLocalSocketAddress());*/
             if (estDans(rejecttab, address)) {
                 socket.close();
-                serverSocket.close();
             }
-           /*if (accepttab.length > 0) {
+            System.out.println("serverscoker.getInetAddress:"+serverSocket.getInetAddress().getAddress().length);
+            System.out.println("socket.getlocaladdress.getInetAddress"+socket.getInetAddress());
+           if (accepttab.length > 0) {
                 if (!estDans(accepttab, address)) {
                     socket.close();
-                    serverSocket.close();
                 }
-            }*/
+            }
 
             boolean Sontour = false;
             boolean stop = false;
             String fichier = null;
             stop = false;
+
             while (!stop) {
                 if (Sontour) {
 
                     try {
-                        String reponse = "HTTP/1.1 200 OK\\r\\n";
+                        String reponse = "HTTP/1.1 200 OK\r\n";
+                        String contenttype="Content-Type: text/html\r\n\r\n";
                         System.out.println("[serveur] En attente d'un message clavier");
 
                         // ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -270,6 +273,7 @@ public class HttpServer {
                         InputStream fileInputStream = new FileInputStream(fichier);
                         byte[] data = fileInputStream.readAllBytes();
                         socket.getOutputStream().write(rep);
+                        socket.getOutputStream().write(contenttype.getBytes(StandardCharsets.UTF_8));
                         socket.getOutputStream().write(data);
                         socket.getOutputStream().flush();
                         Sontour = false;
@@ -284,13 +288,11 @@ public class HttpServer {
                     InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                     String recu = bufferedReader.readLine();
-                    System.out.println(recu);
                     if (recu != null) {
                         fichier = Sroot + recu.substring(4, recu.indexOf("HTTP/1.1"));
                         System.out.println(fichier);
                     }
                     Sontour = true;
-                    System.out.println("yes");
 
                 }
 
